@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Séries populaires - CinéExplorer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen">
+  <!-- Navigation principale -->
+  <nav class="bg-gray-800 p-4 flex space-x-6">
+    <a href="index.html" class="hover:underline">Accueil</a>
+    <a href="films.html" class="hover:underline">Films</a>
+    <a href="series.html" class="hover:underline font-semibold">Séries</a>
+    <a href="favoris.html" class="hover:underline">Favoris</a>
+  </nav>
+
+  <main class="container mx-auto p-4">
+    <section id="page-series">
+      <h1 class="text-3xl font-bold mb-6">Séries populaires</h1>
+      <div id="series-list" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+      <div class="flex justify-center mt-6 space-x-4">
+        <button id="prev-series-page" class="bg-gray-700 px-4 py-2 rounded hover:bg-gray-600">Précédent</button>
+        <span id="series-page-number" class="text-lg font-semibold"></span>
+        <button id="next-series-page" class="bg-gray-700 px-4 py-2 rounded hover:bg-gray-600">Suivant</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="Js/series.js"></script>
+</body>
+</html>
