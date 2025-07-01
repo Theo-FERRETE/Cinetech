@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mes Favoris - CinéExplorer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+  <nav class="bg-gray-800 p-4 flex space-x-6">
+    <a href="index.html" class="hover:underline">Accueil</a>
+    <a href="films.html" class="hover:underline">Films</a>
+    <a href="series.html" class="hover:underline">Séries</a>
+    <a href="favoris.html" class="hover:underline font-semibold">Favoris</a>
+  </nav>
+
+  <main class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6">Mes Favoris</h1>
+    <div id="favoris-list" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+    <p id="empty-message" class="text-gray-400 text-center mt-8 hidden">Aucun favori pour le moment.</p>
+  </main>
+
+  <script src="Js/favoris.js"></script>
+</body>
+</html>
