@@ -18,29 +18,65 @@ document.addEventListener('DOMContentLoaded', function() {
   navLinks.favoris.addEventListener('click', () => showPage('page-favoris'));
 
   // Chargement des films et séries populaires pour la page d'accueil
-  const API_KEY = 'a162de1ec65ccd82900e0f7af3843061'; 
+  const API_KEY = window.API_KEY;
   const BASE_URL = 'https://api.themoviedb.org/3';
   const IMG_BASE = 'https://image.tmdb.org/t/p/w300';
 
-  async function fetchPopular(type) {
+  // Fetch up to 8 movies and 8 tv shows and build a carousel of max 16 items
+  async function fetchPopular(type, limit = 8) {
     const res = await fetch(`${BASE_URL}/${type}/popular?api_key=${API_KEY}&language=fr-FR&page=1`);
     const data = await res.json();
-    return data.results.slice(0, 4); 
+    return data.results.slice(0, limit);
   }
 
-  function renderItems(items, containerId, type) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    items.forEach(item => {
-      container.innerHTML += `
-        <div class="w-32 flex flex-col items-center cursor-pointer group">
-          <img src="${IMG_BASE}${item.poster_path}" alt="${item.title || item.name}" class="rounded-lg shadow mb-2 group-hover:scale-105 transition-transform duration-200"/>
-          <span class="text-sm text-center">${item.title || item.name}</span>
+  function buildCarouselItem(item) {
+    const title = item.title || item.name || '';
+    const poster = item.poster_path ? `${IMG_BASE}${item.poster_path}` : '';
+    return `
+      <div class="carousel-item flex-shrink-0 flex flex-col items-center cursor-pointer group">
+        <div class="poster w-24 md:w-40 h-36 md:h-60 bg-gray-700 rounded-lg overflow-hidden mb-2">
+          <img src="${poster}" alt="${title}" class="w-full h-full object-cover" />
         </div>
-      `;
-    });
+        <span class="carousel-title text-sm text-center max-w-[160px] truncate">${title}</span>
+      </div>
+    `;
   }
 
-  fetchPopular('movie').then(data => renderItems(data, 'home-films', 'movie'));
-  fetchPopular('tv').then(data => renderItems(data, 'home-series', 'tv'));
+  async function initCarousel(type, trackId, prevId, nextId, limit = 16) {
+    const items = await fetchPopular(type, limit).catch(() => []);
+    const track = document.getElementById(trackId);
+    track.innerHTML = items.map(buildCarouselItem).join('');
+
+    const prevBtn = document.getElementById(prevId);
+    const nextBtn = document.getElementById(nextId);
+    let index = 0;
+
+    function update() {
+      // On small screens we prefer native horizontal scrolling (css handles it)
+      if (window.innerWidth < 800) {
+        track.style.transform = '';
+        track.style.scrollBehavior = 'smooth';
+        return;
+      }
+      const firstItem = track.querySelector('.carousel-item');
+      const gap = 16;
+      const itemWidth = firstItem ? firstItem.getBoundingClientRect().width + gap : 200;
+      const container = track.parentElement; // the overflow-hidden container
+      const visible = Math.floor(container.getBoundingClientRect().width / itemWidth) || 1;
+      const maxIndex = Math.max(0, items.length - visible);
+      if (index < 0) index = 0;
+      if (index > maxIndex) index = maxIndex;
+      track.style.transform = `translateX(-${index * itemWidth}px)`;
+    }
+
+    prevBtn.addEventListener('click', () => { index -= 1; update(); });
+    nextBtn.addEventListener('click', () => { index += 1; update(); });
+
+    window.addEventListener('resize', update);
+    window.requestAnimationFrame(() => setTimeout(update, 100));
+  }
+
+  // Initialize separate carousels for movies and series
+  initCarousel('movie', 'films-carousel-track', 'films-carousel-prev', 'films-carousel-next', 16);
+  initCarousel('tv', 'series-carousel-track', 'series-carousel-prev', 'series-carousel-next', 16);
 });
