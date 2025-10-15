@@ -1,0 +1,439 @@
+/* Global light theme overrides to make the UI generally lighter */
+/* Override common Tailwind gray classes used in the project */
+/* Default to light theme variables (applied under .theme-light) */
+.theme-light .bg-gray-900 { background-color: #f8fafc !important; } /* very light */
+.theme-light .bg-gray-800 { background-color: #f1f5f9 !important; }
+.theme-light .bg-gray-700 { background-color: #e2e8f0 !important; }
+
+.theme-light .text-white { color: #0f172a !important; } /* dark text on light bg */
+.theme-light .text-gray-300 { color: #475569 !important; }
+.theme-light .text-gray-400 { color: #64748b !important; }
+
+/* Buttons / controls */
+.theme-light .bg-gray-700:hover, .theme-light .bg-gray-700:focus { background-color: #cbd5e1 !important; }
+.theme-light .bg-gray-700 { background-color: #e2e8f0 !important; }
+.theme-light .bg-gray-600 { background-color: #e6eef8 !important; }
+
+/* Cards and containers */
+.rounded-lg { background-clip: padding-box; }
+
+/* Carousel track transition */
+#films-carousel-track, #series-carousel-track { transition: transform 300ms ease; }
+
+/* Ensure images have visible border on light backgrounds */
+img { border-radius: 6px; }
+
+/* Body default bg/text */
+/* Theme root styles */
+.theme-light body, .theme-light { background-color: #f8fafc !important; color: #0f172a !important; }
+
+/* Dark theme overrides */
+.theme-dark .bg-gray-900 { background-color: #0f172a !important; }
+.theme-dark .bg-gray-800 { background-color: #1e293b !important; }
+.theme-dark .bg-gray-700 { background-color: #334155 !important; }
+.theme-dark .text-white { color: #f8fafc !important; }
+.theme-dark .text-gray-300 { color: #cbd5e1 !important; }
+.theme-dark .text-gray-400 { color: #94a3b8 !important; }
+.theme-dark .bg-gray-700:hover, .theme-dark .bg-gray-700:focus { background-color: #475569 !important; }
+.theme-dark .bg-gray-700 { background-color: #334155 !important; }
+.theme-dark .bg-gray-600 { background-color: #475569 !important; }
+
+/* Smooth transitions for theme changes */
+html, body, .bg-gray-800, .bg-gray-700, .bg-gray-900, .text-white, .text-gray-300, .text-gray-400, .rounded-lg, img {
+	transition: background-color 350ms ease, color 350ms ease, border-color 350ms ease, opacity 250ms ease;
+}
+
+/* Slight fade-in for cards and images */
+.rounded-lg, img {
+	opacity: 0.98;
+}
+
+/* DaisyUI-like button styles */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.5rem;
+	font-weight: 600;
+	cursor: pointer;
+	border: 1px solid transparent;
+}
+.btn-primary {
+	background-color: #2563eb;
+	color: #ffffff;
+	border-color: transparent;
+}
+.theme-dark .btn-primary {
+	background-color: #1e40af;
+}
+.btn + .btn { margin-left: 0.5rem; }
+
+/* Ghost button (minimal) */
+.btn-ghost {
+	background: transparent;
+	border-color: transparent;
+	color: inherit;
+	padding: 0.45rem 0.6rem;
+}
+
+/* Favorite (star) button */
+.favorite-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.8rem; /* slightly larger to fit bigger star */
+	height: 2.8rem;
+	border-radius: 9999px;
+	background: transparent;
+	border: 1px solid rgba(15,23,42,0.06);
+	font-size: 1.5rem; /* larger star */
+	line-height: 1;
+	transition: background-color 200ms ease, transform 120ms ease, color 200ms ease;
+}
+.favorite-btn:hover { transform: scale(1.07); }
+.favorite-btn .star { pointer-events: none; display: inline-block; transform-origin: center; }
+.favorite-btn.active { background-color: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.24); }
+.favorite-btn.active .star { color: #f59e0b; transform: scale(1.05); }
+/* Standardized button sizing utility for inline groups */
+.btn-inline { min-width: 2.8rem; height: 2.8rem; padding: 0 0.75rem; display: inline-flex; align-items: center; justify-content: center; }
+.btn-inline .star { font-size: 1.3rem; }
+
+/* Ensure pagination buttons align with card buttons */
+#pagination button { min-width: 2.8rem; height: 2.8rem; display: inline-flex; align-items: center; justify-content: center; }
+
+/* Make card action groups vertically centered and buttons same height */
+.card-actions { display: flex; gap: 0.5rem; align-items: center; }
+
+/* Media card layout: force equal height and push actions to bottom */
+.media-card {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+}
+.card-body {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+}
+.card-body img { margin-bottom: 0.5rem; }
+.card-actions { margin-top: 0.75rem; }
+.theme-dark .favorite-btn.active { background-color: rgba(245,158,11,0.14); }
+
+/* Nav link hover */
+/* Favorite animation (pop + rotate) */
+@keyframes favorite-pop {
+	0% { transform: scale(1) rotate(0deg); }
+	40% { transform: scale(1.35) rotate(-10deg); }
+	70% { transform: scale(0.95) rotate(6deg); }
+	100% { transform: scale(1) rotate(0deg); }
+}
+.favorite-animate .star {
+	animation: favorite-pop 360ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* Nav link hover */
+a:hover { color: inherit; text-decoration: underline; }
+
+/* Toast notifications */
+.toast-container {
+	position: fixed;
+	right: 1rem;
+	bottom: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	z-index: 9999;
+}
+.toast {
+	background: rgba(30,41,59,0.95); /* slate-800 */
+	color: #fff;
+	padding: 0.6rem 0.9rem;
+	border-radius: 0.5rem;
+	box-shadow: 0 6px 18px rgba(2,6,23,0.5);
+	font-size: 0.95rem;
+	opacity: 0;
+	transform: translateY(8px) scale(0.98);
+	transition: opacity 220ms ease, transform 220ms ease;
+}
+.toast.show {
+	opacity: 1;
+	transform: translateY(0) scale(1);
+}
+.toast.success { background: rgba(5,150,105,0.95); }
+.toast.info { background: rgba(37,99,235,0.95); }
+.toast.warn { background: rgba(234,88,12,0.95); }
+.toast.error { background: rgba(220,38,38,0.95); }
+
+/* Search input */
+.search-input {
+	background: rgba(255,255,255,0.04);
+	color: #fff;
+	border: 1px solid rgba(255,255,255,0.06);
+	min-width: 200px;
+}
+.search-input:focus {
+	outline: none;
+	border-color: rgba(59,130,246,0.9);
+	box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+
+/* Unified button styles */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.5rem 0.8rem;
+	border-radius: 0.5rem;
+	border: 1px solid transparent;
+	font-weight: 600;
+	cursor: pointer;
+	transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+}
+.btn:active { transform: translateY(1px) scale(0.995); }
+.btn:focus { outline: none; box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
+
+.btn-primary {
+	background: linear-gradient(180deg, #2563eb, #1e40af);
+	color: #fff;
+	border-color: rgba(255,255,255,0.06);
+	box-shadow: 0 6px 14px rgba(30,58,138,0.25);
+}
+.btn-primary:hover { filter: brightness(1.06); }
+
+.btn-ghost {
+	background: transparent;
+	color: #e5e7eb;
+	border-color: rgba(255,255,255,0.04);
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.02); }
+
+.btn-inline { padding: 0.45rem 0.7rem; font-size: 0.95rem; }
+
+/* Favorite button styling, larger star and right alignment */
+.favorite-btn {
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.06);
+	width: 44px;
+	height: 44px;
+	border-radius: 9999px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: transform 180ms cubic-bezier(.2,.9,.2,1), background-color 160ms ease;
+}
+.favorite-btn .star { font-size: 1.3rem; line-height: 1; }
+.favorite-btn:hover { transform: scale(1.06); background: rgba(255,255,255,0.02); }
+.favorite-btn.active { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.3); }
+
+/* Card actions: put primary action left, favorite at right */
+.card-actions {
+	display: flex;
+	gap: 0.6rem;
+	align-items: center;
+	justify-content: space-between;
+}
+.card-actions .left-actions { display: flex; gap: 0.6rem; align-items: center; }
+.card-actions .right-actions { margin-left: auto; }
+
+/* Ensure card body grows so actions stick to bottom */
+.media-card { display: flex; flex-direction: column; }
+.card-body { flex: 1 1 auto; }
+.card-actions { margin-top: auto; }
+
+/* Cast / Actors list on detail page */
+.cast-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+	gap: 0.75rem;
+	align-items: start;
+}
+.cast-item {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	align-items: center;
+	background: rgba(255,255,255,0.02);
+	padding: 0.6rem;
+	border-radius: 0.6rem;
+	text-align: center;
+	transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.cast-item:focus,
+.cast-item:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(2,6,23,0.45); outline: none; }
+.cast-item img { width: 100px; height: 150px; object-fit: cover; border-radius: 0.35rem; }
+.cast-meta { display: flex; flex-direction: column; gap: 0.15rem; }
+.cast-name { font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px; }
+.cast-role { font-size: 0.85rem; color: #9ca3af; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; }
+
+/* Mobile: make cast list horizontally scrollable */
+@media (max-width: 640px) {
+	.cast-list {
+		display: flex;
+		overflow-x: auto;
+		gap: 0.5rem;
+		padding-bottom: 6px;
+	}
+	.cast-item { min-width: 120px; flex: 0 0 auto; }
+}
+
+/* Responsive navigation */
+.nav-mobile-toggle { display: none; }
+.nav-menu { display: flex; gap: 1rem; align-items: center; }
+
+@media (max-width: 800px) {
+	.nav-mobile-toggle { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: transparent; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; }
+	.nav-menu { display: none; }
+	.nav-menu.open { display: flex; flex-direction: column; gap: 0.6rem; padding: 0.75rem; width: 100%; background: rgba(17,24,39,0.95); position: absolute; top: 100%; left: 0; z-index: 50; }
+	nav.responsive { position: relative; }
+	/* Remove fragile overrides of Tailwind utility classes here to avoid inconsistent behavior */
+}
+
+/* Mobile carousel: allow touch scroll and hide controls */
+@media (max-width: 640px) {
+	#films-carousel-track, #series-carousel-track { display: flex; gap: 0.5rem; padding: 0.25rem; scroll-snap-type: x mandatory; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+	#films-carousel-track > div, #series-carousel-track > div { scroll-snap-align: start; flex: 0 0 auto; }
+	/* adjust carousel container to allow visible previous/next items */
+	.carousel-container { overflow-x: auto; }
+	/* reduce arrow size and keep them slightly inset */
+	#films-carousel-prev, #films-carousel-next, #series-carousel-prev, #series-carousel-next { width: 34px; height: 34px; padding: 6px; }
+}
+
+/* Consistent responsive grid for films/series lists */
+#films-list, #series-list {
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1.5rem;
+}
+@media (min-width: 640px) {
+	#films-list, #series-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+	#films-list, #series-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* carousel item default sizing */
+.carousel-item { width: auto; }
+
+/* Ensure the top-level carousel card wrappers take full width when stacked */
+.carousel-block, .carousel-card, .bg-gray-800.rounded-lg.p-6.shadow {
+	width: 100% !important;
+}
+
+/* Ensure inner track occupies full available width */
+.carousel-container, #films-carousel, #series-carousel, #films-carousel-track, #series-carousel-track {
+	width: 100% !important;
+}
+
+/* Carousel responsive sizing */
+.carousel-item { display: inline-flex; flex-direction: column; align-items: center; }
+.carousel-item .poster { width: 6rem; height: 9rem; }
+.carousel-item .carousel-title { max-width: 6rem; }
+
+@media (min-width: 640px) {
+	.carousel-item .poster { width: 8rem; height: 12rem; }
+	.carousel-item .carousel-title { max-width: 8rem; }
+}
+
+@media (min-width: 1024px) {
+	.carousel-item .poster { width: 10rem; height: 15rem; }
+	.carousel-item .carousel-title { max-width: 10rem; }
+}
+
+/* Make media-card images adapt their height to container width for consistent responsive behavior */
+.media-card img {
+	width: 100%;
+	height: auto; /* prefer intrinsic aspect ratio */
+	max-height: 420px; /* cap on large screens */
+	object-fit: cover;
+}
+
+@media (min-width: 640px) {
+	.media-card img { max-height: 360px; }
+}
+
+@media (max-width: 480px) {
+	.media-card img { max-height: 320px; }
+}
+
+/* Detail page responsiveness */
+.detail-poster { width: 100%; height: auto; }
+.detail-meta { padding: 0.5rem; }
+
+@media (max-width: 768px) {
+	#detail-content { padding: 1rem; }
+	.detail-poster { max-height: 420px; object-fit: cover; }
+	.cast-item img { width: 72px; height: 108px; }
+	.cast-name { max-width: 90px; }
+	.cast-role { max-width: 100px; }
+}
+
+@media (min-width: 769px) {
+	#detail-content { display: flex; }
+}
+
+/* Detail page specific layout and responsive rules */
+#detail-content {
+	width: 100%;
+	max-width: 1100px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	align-items: center;
+}
+
+/* Poster column */
+#detail-content > div:first-child {
+	width: 100%;
+	flex: 0 0 auto;
+	display: flex;
+	justify-content: center;
+}
+#detail-content > div:first-child img {
+	width: 100%;
+	height: auto;
+	max-height: 640px;
+	object-fit: cover;
+	border-radius: 0.5rem;
+}
+
+/* Meta column */
+#detail-content > div:nth-child(2) {
+	width: 100%;
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Actions (back / favorite) */
+#detail-content .btn, #detail-content .favorite-btn {
+	min-height: 44px;
+}
+#detail-content .favorite-btn { width: 44px; }
+
+/* Cast header and list spacing */
+#detail-content #cast-container { width: 100%; margin-top: 0.75rem; }
+#detail-content .cast-list { margin-top: 0.5rem; }
+
+/* Desktop: side-by-side poster + meta */
+@media (min-width: 768px) {
+	#detail-content { flex-direction: row; align-items: flex-start; }
+	#detail-content > div:first-child { flex: 0 0 46%; max-width: 46%; }
+	#detail-content > div:nth-child(2) { flex: 1 1 54%; max-width: 54%; }
+	#detail-content > div:nth-child(2) { padding-left: 1rem; }
+}
+
+/* Small screens: make cast list horizontally scrollable */
+@media (max-width: 640px) {
+	#detail-content .cast-list { display: flex; overflow-x: auto; gap: 0.5rem; padding-bottom: 6px; }
+	#detail-content .cast-item { min-width: 120px; flex: 0 0 auto; }
+	#detail-content h1 { font-size: 1.75rem; }
+}
+
+/* Utility for hidden on mobile */
+.hide-mobile { display: inline-flex; }
+@media (max-width: 800px) { .hide-mobile { display: none; } }
