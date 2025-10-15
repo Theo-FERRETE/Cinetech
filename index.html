@@ -6,14 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
   <!-- Navigation principale -->
-  <nav class="bg-gray-800 p-4 flex space-x-6">
-    <a href="#" id="nav-home" class="hover:underline font-semibold">Accueil</a>
-    <a href="films.html" id="nav-films" class="hover:underline">Films</a>
-    <a href="#" id="nav-series" class="hover:underline">Séries</a>
-    <a href="#" id="nav-favoris" class="hover:underline">Favoris</a>
+  <nav class="bg-gray-800 p-4 flex items-center space-x-4 responsive">
+  <button class="nav-mobile-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+    <div class="nav-menu">
+      <a href="#" id="nav-home" class="hover:underline font-semibold">Accueil</a>
+      <a href="films.html" id="nav-films" class="hover:underline">Films</a>
+      <a href="#" id="nav-series" class="hover:underline">Séries</a>
+      <a href="#" id="nav-favoris" class="hover:underline">Favoris</a>
+    </div>
+    <div class="ml-auto flex items-center gap-2">
+      <button class="theme-toggle bg-gray-700 text-white px-3 py-1 rounded">☀️ Clair</button>
+    </div>
   </nav>
 
   <!-- Contenu principal -->
@@ -25,14 +32,35 @@
         <p class="text-lg text-gray-300 mb-8 text-center max-w-xl">
           Explorez les derniers films et séries, découvrez les détails, et créez votre liste de favoris.
         </p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-          <div class="bg-gray-800 rounded-lg p-6 shadow flex flex-col items-center">
-            <h2 class="text-2xl font-semibold mb-2">Films populaires</h2>
-            <div id="home-films" class="flex flex-wrap justify-center gap-4"></div>
+  <div class="grid grid-cols-1 gap-8 w-full">
+          <!-- Films carousel -->
+          <div class="bg-gray-800 rounded-lg p-6 shadow">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-2xl font-semibold">Films populaires</h2>
+              <a href="films.html" class="btn btn-primary">Voir les films</a>
+            </div>
+            <div class="relative mb-6">
+              <button id="films-carousel-prev" aria-label="Précédent" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-full">‹</button>
+              <div id="films-carousel" class="carousel-container overflow-hidden">
+                <div id="films-carousel-track" class="flex gap-4 will-change-transform p-2"></div>
+              </div>
+              <button id="films-carousel-next" aria-label="Suivant" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-full">›</button>
+            </div>
           </div>
-          <div class="bg-gray-800 rounded-lg p-6 shadow flex flex-col items-center">
-            <h2 class="text-2xl font-semibold mb-2">Séries populaires</h2>
-            <div id="home-series" class="flex flex-wrap justify-center gap-4"></div>
+
+          <!-- Series carousel -->
+          <div class="bg-gray-800 rounded-lg p-6 shadow">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-2xl font-semibold">Séries populaires</h2>
+              <a href="series.html" class="btn btn-primary">Voir les séries</a>
+            </div>
+            <div class="relative">
+              <button id="series-carousel-prev" aria-label="Précédent" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-full">‹</button>
+              <div id="series-carousel" class="carousel-container overflow-hidden">
+                <div id="series-carousel-track" class="flex gap-4 will-change-transform p-2"></div>
+              </div>
+              <button id="series-carousel-next" aria-label="Suivant" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-full">›</button>
+            </div>
           </div>
         </div>
       </div>
@@ -45,6 +73,9 @@
     <section id="page-favoris" class="page hidden"></section>
   </main>
 
+  <script src="config.js"></script>
+  <script src="assets/theme.js"></script>
+  <script src="assets/nav.js"></script>
   <script src="Js/app.js"></script>
 </body>
 </html>
