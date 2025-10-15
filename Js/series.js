@@ -1,7 +1,7 @@
 // series.js
 
 document.addEventListener('DOMContentLoaded', function () {
-  const API_KEY = 'a162de1ec65ccd82900e0f7af3843061'; 
+  const API_KEY = window.API_KEY;
   const BASE_URL = 'https://api.themoviedb.org/3';
   const IMG_BASE = 'https://image.tmdb.org/t/p/w300';
 
@@ -50,9 +50,57 @@ document.addEventListener('DOMContentLoaded', function () {
       totalPages = data.total_pages;
       return data.results;
     } catch (err) {
-      seriesList.innerHTML = `<div class="col-span-4 text-red-400 text-center">Erreur de chargement des séries.</div>`;
+  seriesList.innerHTML = `<div class="w-full text-red-400 text-center py-6">Erreur de chargement des séries.</div>`;
       return [];
     }
+  }
+
+  // Debounce helper for search
+  function debounce(fn, wait) {
+    let t;
+    return function (...args) {
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), wait);
+    };
+  }
+
+  async function searchSeries(query) {
+    if (!query || !query.trim()) return [];
+    try {
+      const res = await fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&language=fr-FR&query=${encodeURIComponent(query)}&page=1`);
+      if (!res.ok) throw new Error('Erreur API search');
+      const data = await res.json();
+      return data.results;
+    } catch (err) {
+      showToast('Erreur lors de la recherche', 'error');
+      return [];
+    }
+  }
+
+  // Bind search
+  const searchInput = document.getElementById('search-input');
+  const searchClear = document.getElementById('search-clear');
+  if (searchInput) {
+    const onSearch = debounce(async (e) => {
+      const q = e.target.value;
+      if (!q) {
+        loadSeries(1);
+        paginationContainer.style.display = '';
+        searchClear.classList.add('hidden');
+        return;
+      }
+      const results = await searchSeries(q);
+      renderSeries(results);
+      paginationContainer.style.display = 'none';
+      searchClear.classList.remove('hidden');
+    }, 420);
+    searchInput.addEventListener('input', onSearch);
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      searchClear.classList.add('hidden');
+      loadSeries(1);
+      paginationContainer.style.display = '';
+    });
   }
 
   window.toggleFavori = function (
@@ -65,10 +113,16 @@ document.addEventListener('DOMContentLoaded', function () {
   ) {
     event.stopPropagation();
     event.preventDefault();
+    const btn = event.currentTarget;
+    // play animation
+    btn.classList.add('favorite-animate');
+    setTimeout(() => btn.classList.remove('favorite-animate'), 360);
 
     if (isFavori(id, type)) {
       removeFavori(id, type);
-      alert(`${title} a été retiré de vos favoris.`);
+      showToast(`${title} retiré des favoris.`, 'info');
+      btn.classList.remove('active');
+      btn.querySelector('.star').textContent = '☆';
     } else {
       addFavori({
         id: id,
@@ -77,42 +131,43 @@ document.addEventListener('DOMContentLoaded', function () {
         poster_path: poster_path,
         release_date: date,
       });
-      alert(`${title} a été ajouté à vos favoris.`);
+      showToast(`${title} ajouté aux favoris.`, 'success');
+      btn.classList.add('active');
+      btn.querySelector('.star').textContent = '★';
     }
-    loadSeries(currentPage);
+    // pas de reload complet, on met à jour l'UI locale
   };
 
   function renderSeries(series) {
     seriesList.innerHTML = '';
     if (!series.length) {
-      seriesList.innerHTML = `<div class="col-span-4 text-gray-400 text-center">Aucune série trouvée.</div>`;
+      seriesList.innerHTML = `<div class="w-full text-gray-400 text-center py-6">Aucune série trouvée.</div>`;
       return;
     }
     series.forEach((serie) => {
       const favori = isFavori(serie.id, 'tv');
       seriesList.innerHTML += `
-        <div class="bg-gray-800 rounded shadow p-2 flex flex-col items-center hover:bg-gray-700 transition relative">
-          <a href="detail.html?type=tv&id=${serie.id}" class="w-full cursor-pointer no-underline">
+        <div class="media-card bg-gray-800 rounded shadow p-2 hover:bg-gray-700 transition relative">
+          <div class="card-body">
             <img src="${
               serie.poster_path
                 ? IMG_BASE + serie.poster_path
                 : 'https://via.placeholder.com/300x450?text=No+Image'
             }" 
-                 alt="${serie.name}" class="rounded mb-2 w-full h-72 object-cover"/>
+                 alt="${serie.name}" class="rounded mb-2 w-full h-56 md:h-72 object-cover"/>
             <h2 class="text-lg font-semibold text-center text-white">${serie.name}</h2>
-            <p class="text-sm text-gray-400 text-center">${
-              serie.first_air_date || ''
-            }</p>
-          </a>
-          <button class="mt-2 ${
-            favori ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'
-          } text-white text-sm px-3 py-1 rounded" 
-                  onclick="toggleFavori(event, ${serie.id}, 'tv', '${serie.name.replace(
-                    /'/g,
-                    "\\'"
-                  )}', '${serie.poster_path}', '${serie.first_air_date}')">
-            ${favori ? 'Retirer des favoris' : 'Ajouter aux favoris'}
-          </button>
+            <p class="text-sm text-gray-400 text-center">${serie.first_air_date || ''}</p>
+          </div>
+          <div class="mt-3 card-actions">
+            <div class="left-actions">
+              <a href="detail.html?type=tv&id=${serie.id}" class="btn btn-primary btn-inline">Voir le détail</a>
+            </div>
+            <div class="right-actions">
+              <button class="favorite-btn ${favori ? 'active' : ''}" aria-label="favori" onclick="toggleFavori(event, ${serie.id}, 'tv', '${serie.name.replace(/'/g, "\\'")}', '${serie.poster_path}', '${serie.first_air_date}')">
+                <span class="star">${favori ? '★' : '☆'}</span>
+              </button>
+            </div>
+          </div>
         </div>
       `;
     });
