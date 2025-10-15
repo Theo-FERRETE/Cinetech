@@ -1,10 +1,6 @@
 # Ignore environment files
 .env
-config.js
 
-# Optionally ignore local config that contains API keys
-# Uncomment if you want config.js ignored as well
-# config.js
 
 # Node modules (if you add node stuff later)
 node_modules/
